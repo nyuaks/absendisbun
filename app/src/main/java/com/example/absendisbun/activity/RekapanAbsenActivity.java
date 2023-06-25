@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.absendisbun.R;
 
-public class RekapanAbsen extends AppCompatActivity {
+public class RekapanAbsenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
