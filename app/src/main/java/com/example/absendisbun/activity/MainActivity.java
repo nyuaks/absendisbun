@@ -1,6 +1,7 @@
 package com.example.absendisbun.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ListAbsensiAdapter listAbsensiAdapter;
     private RecyclerView rvRekapAbsensi;
     private TextView namaKaryawan, nip, jam, tanggal;
+    private CardView cvRekapanAbsen,cvPerizinan,cvAbsensi;
     BroadcastReceiver broadcastReceiver;
     private final SimpleDateFormat sdfWatchTime = new SimpleDateFormat("HH:mm");
     private final SimpleDateFormat sdfWatchDate = new SimpleDateFormat("dd MMMM YYYY");
@@ -50,19 +52,30 @@ public class MainActivity extends AppCompatActivity {
         nip = findViewById(R.id.tvNip);
         jam = findViewById(R.id.tvRealTime);
         tanggal = findViewById(R.id.tvDate);
+        cvAbsensi = findViewById(R.id.cardViewAbsensi);
+        cvPerizinan = findViewById(R.id.cardViewAbsensi);
+        cvRekapanAbsen = findViewById(R.id.cardViewRekapAbsen);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         prf = new PrefManager(this);
         namaKaryawan.setText(prf.getString(Const.MY_NAME));
         nip.setText(prf.getString(Const.MY_NIP));
 
-        String currentDateTimeString = java.text.DateFormat.getDateTimeInstance().format(new Date());
+        String currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());
         tanggal.setText(currentDateTimeString);
 
         rvRekapAbsensi = findViewById(R.id.rvListAbsen);
         rvRekapAbsensi.setHasFixedSize(true);
         rvRekapAbsensi.setLayoutManager(new LinearLayoutManager(this));
         listAbsensiAdapter = new ListAbsensiAdapter(this);
+
+        cvRekapanAbsen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RekapanAbsenActivity.class);
+                startActivity(intent);
+            }
+        });
 
         getListAbsensi();
     }

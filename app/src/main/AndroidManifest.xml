@@ -16,13 +16,13 @@
         tools:replace="android:icon,android:allowBackup,android:theme,android:usesCleartextTraffic"
         tools:targetApi="31">
         <activity
-            android:name=".AbsensiActivity"
+            android:name=".activity.AbsensiActivity"
             android:exported="false" />
         <activity
-            android:name=".Perizinan"
+            android:name=".activity.PerizinanActivity"
             android:exported="false" />
         <activity
-            android:name=".RekapanAbsen"
+            android:name=".activity.RekapanAbsenActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
