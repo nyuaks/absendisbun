@@ -48,26 +48,34 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nik"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Masukkan Email">
+                app:hintTextColor="@color/gray"
+                app:hintEnabled="true"
+                android:hint="Email"
+                app:placeholderText="Masukan Email"
+                app:boxStrokeColor="@color/gray">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Masukkan Password"
+                app:boxStrokeColor="@color/gray"
+                app:hintTextColor="@color/gray"
+                app:hintEnabled="true"
+                android:hint="Password"
+                app:placeholderText="Masukan Password"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />
