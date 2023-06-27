@@ -19,6 +19,7 @@ import com.example.absendisbun.R;
 import com.example.absendisbun.config.Const;
 import com.example.absendisbun.service.response.listabsensi.AbsensiItem;
 import com.example.absendisbun.service.response.listabsensi.DataListAbsensi;
+import com.example.absendisbun.utils.ConverterData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,8 +31,6 @@ import java.util.TimeZone;
 public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.ViewHolder> {
     private List<AbsensiItem> dataListAbsensis;
     private Activity activity;
-    private final SimpleDateFormat sdfWatchTime = new SimpleDateFormat("HH:mm");
-    private final SimpleDateFormat sdfWatchDate = new SimpleDateFormat("dd MMMM YYYY");
 
     public ListAbsensiAdapter(Activity activity){
         this.dataListAbsensis = new ArrayList<>();
@@ -52,42 +51,20 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ListAbsensiAdapter.ViewHolder holder, int position) {
-        TimeZone tz = TimeZone.getTimeZone("Asia/Makassar");
-        sdfWatchTime.setTimeZone(tz);
-        sdfWatchDate.setTimeZone(tz);
         String timeIn = "-";
         String timeOut = "-";
         String created = "-";
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DEFAULT_DATE_FORMAT);
+        ConverterData cvtData = new ConverterData();
 
         if (dataListAbsensis.get(position).getTimeIn()!=null)
         {
-            Date date = new Date();
-            try {
-                date = dateFormat.parse(dataListAbsensis.get(position).getTimeIn());
-            } catch (ParseException e) {
-                Log.e("ParseException", e.getMessage());
-            }
-            timeIn = (String) DateFormat.format(Const.TIME_FORMAT_1, date);
+            timeIn = cvtData.convertTimeFormat1(dataListAbsensis.get(position).getTimeIn());
         }
         if (dataListAbsensis.get(position).getTimeOut()!=null)
         {
-            Date date = new Date();
-            try {
-                date = dateFormat.parse(dataListAbsensis.get(position).getTimeOut());
-            } catch (ParseException e) {
-                Log.e("ParseException", e.getMessage());
-            }
-            timeOut = (String) DateFormat.format(Const.TIME_FORMAT_1, date);
-
+            timeOut = cvtData.convertTimeFormat1(dataListAbsensis.get(position).getTimeOut());
         }
-        Date date = new Date();
-        try {
-            date = dateFormat.parse(dataListAbsensis.get(position).getCreatedAt());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        created = (String) DateFormat.format(Const.DATE_FORMAT_2, date);
+        created = cvtData.convertDateFormat2(dataListAbsensis.get(position).getCreatedAt());
 
         holder.createAt.setText(created);
         holder.timeIn.setText(timeIn);

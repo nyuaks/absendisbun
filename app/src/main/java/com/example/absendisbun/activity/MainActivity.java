@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         jam = findViewById(R.id.tvRealTime);
         tanggal = findViewById(R.id.tvDate);
         cvAbsensi = findViewById(R.id.cardViewAbsensi);
-        cvPerizinan = findViewById(R.id.cardViewAbsensi);
+        cvPerizinan = findViewById(R.id.cardViewPerizinan);
         cvRekapanAbsen = findViewById(R.id.cardViewRekapAbsen);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -73,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RekapanAbsenActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        cvPerizinan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PerizinanActivity.class);
                 startActivity(intent);
             }
         });

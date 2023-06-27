@@ -1,15 +1,22 @@
 package com.example.absendisbun.service;
 
+import com.example.absendisbun.service.response.jenisizin.ResponseJenisIzin;
 import com.example.absendisbun.service.response.listabsensi.ResponseListAbsensi;
+import com.example.absendisbun.service.response.listizin.ResponseListIzin;
 import com.example.absendisbun.service.response.login.ResponseLogin;
+import com.example.absendisbun.service.response.postizin.ResponsePostIzin;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -25,14 +32,32 @@ public interface ApiInterface {
     })
     @GET("absensi")
     Call<ResponseListAbsensi> getListAbsensi(@Header("Authorization") String token);
-//
-//    @FormUrlEncoded
-//    @POST("hasil_votings")
-//    Call<ResponseVote> postVote(
-//            @Field("users_id") int warga,
-//            @Field("kandidat_id") int kandidat,
-//            @Field("periode_id") int periode
-//    );
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("getIzinCuti")
+    Call<ResponseListIzin> getListIzin(@Header("Authorization") String token);
+
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: application/json"
+    })
+    @GET("jenisAbsensi")
+    Call<ResponseJenisIzin> getJenisIzin(@Header("Authorization") String token);
+
+    @Multipart
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("postIzinCuti")
+    Call<ResponsePostIzin> postIzin(@Header("Authorization") String token,
+                                    @Part("tertanggal") RequestBody tglIzin,
+                                    @Part("jumlah_hari") RequestBody jumlahHari,
+                                    @Part("jenis_absensi_id") RequestBody jenisIzinId,
+                                    @Part MultipartBody.Part media
+    );
 //
 //    @GET("hasil_votings")
 //    Call<ResponseHasilVote> getHasilVote(@Query("penduduk_id")int warga);

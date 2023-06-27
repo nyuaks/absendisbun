@@ -3,9 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/border_style_silver_8.xml" value="0.237" />
+        <entry key="app/src/main/res/drawable-v24/button_background_green.xml" value="0.237" />
+        <entry key="app/src/main/res/drawable/baseline_access_time_24.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/bg_overlay.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/bg_overlay_white.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/button_radius.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/ic_event_note_24px.xml" value="0.191" />
+        <entry key="app/src/main/res/drawable/ic_izin_cuti.xml" value="0.165" />
+        <entry key="app/src/main/res/drawable/shadow.xml" value="0.191" />
+        <entry key="app/src/main/res/layout/activity_absensi.xml" value="0.1828125" />
+        <entry key="app/src/main/res/layout/activity_create_perizinan.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.12682189941406247" />
+        <entry key="app/src/main/res/layout/activity_perizinan.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/layout/activity_rekapan_absen.xml" value="0.17291666666666666" />
+        <entry key="app/src/main/res/layout/item_izin.xml" value="0.34378662109375" />
         <entry key="app/src/main/res/layout/item_rekap_kehadiran.xml" value="0.335" />
       </map>
     </option>

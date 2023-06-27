@@ -46,48 +46,55 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void letGoLogin() {
-        String email = edEmail.getEditableText().toString();
-        String password = edPassword.getEditableText().toString();
+        PrefManager prf = new PrefManager(LoginActivity.this);
+        if (!prf.getString(Const.TOKEN).isEmpty()){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else{
+            String email = edEmail.getEditableText().toString();
+            String password = edPassword.getEditableText().toString();
 
-        Call<ResponseLogin> api = apiInterface.getLogin(email, password);
-        api.enqueue(new Callback<ResponseLogin>() {
-            @Override
-            public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-                if (response.isSuccessful()){
-                    assert response.body() != null;
-                    if (response.body().getData() != null && response.body().isSuccess()){
-                        Log.i("DATA USER",response.body().getData().toString());
-                        PrefManager prefManager = new PrefManager(getApplicationContext());
-                        prefManager.setString(Const.TOKEN, response.body().getData().getToken());
-                        prefManager.setString(Const.MY_NAME, response.body().getData().getUser().getName());
-                        prefManager.setString(Const.MY_EMAIL, response.body().getData().getUser().getEmail());
-                        prefManager.setString(Const.MY_NIP, response.body().getData().getUser().getPegawai().getNip());
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+            Call<ResponseLogin> api = apiInterface.getLogin(email, password);
+            api.enqueue(new Callback<ResponseLogin>() {
+                @Override
+                public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                    if (response.isSuccessful()){
+                        assert response.body() != null;
+                        if (response.body().getData() != null && response.body().isSuccess()){
+                            Log.i("DATA USER",response.body().getData().toString());
+                            PrefManager prefManager = new PrefManager(getApplicationContext());
+                            prefManager.setString(Const.TOKEN, response.body().getData().getToken());
+                            prefManager.setString(Const.MY_NAME, response.body().getData().getUser().getName());
+                            prefManager.setString(Const.MY_EMAIL, response.body().getData().getUser().getEmail());
+                            prefManager.setString(Const.MY_NIP, response.body().getData().getUser().getPegawai().getNip());
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }else{
+                            new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Peringatan")
+                                    .setContentText("User Tidak Terdaftar \n (Cek kembali Emai dan Password)")
+                                    .show();
+                        }
                     }else{
                         new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("Peringatan")
-                                .setContentText("User Tidak Terdaftar \n (Cek kembali Emai dan Password)")
+                                .setContentText("Error Code: "+response.message())
                                 .show();
+
                     }
-                }else{
+                }
+
+                @Override
+                public void onFailure(Call<ResponseLogin> call, Throwable t) {
                     new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Peringatan")
-                            .setContentText("Error Code: "+response.body().getMessage())
+                            .setContentText("GAGAL Login!")
                             .show();
-
                 }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseLogin> call, Throwable t) {
-                new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Peringatan")
-                        .setContentText("GAGAL Login!")
-                        .show();
-            }
-        });
+            });
+        }
     }
 
     public void startActivity(){
