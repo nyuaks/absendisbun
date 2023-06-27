@@ -1,10 +1,9 @@
 package com.example.absendisbun.service;
 
-import com.example.absendisbun.service.response.jenisizin.ResponseJenisIzin;
 import com.example.absendisbun.service.response.listabsensi.ResponseListAbsensi;
-import com.example.absendisbun.service.response.listizin.ResponseListIzin;
 import com.example.absendisbun.service.response.login.ResponseLogin;
 import com.example.absendisbun.service.response.postizin.ResponsePostIzin;
+import com.example.absendisbun.service.response.postabsensi.ResponsePostAbsensi;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -32,6 +31,24 @@ public interface ApiInterface {
     })
     @GET("absensi")
     Call<ResponseListAbsensi> getListAbsensi(@Header("Authorization") String token);
+
+    @Multipart
+    @Headers({
+            "Accept: application/json",
+    })
+    @POST("postAbsensi")
+    Call<ResponsePostAbsensi> postAbsensi (@Header("Authorization") String token,
+                                               @Part("latitude") RequestBody latitude,
+                                               @Part("longitude") RequestBody longitude,
+                                               @Part MultipartBody.Part media);
+//
+//    @FormUrlEncoded
+//    @POST("hasil_votings")
+//    Call<ResponseVote> postVote(
+//            @Field("users_id") int warga,
+//            @Field("kandidat_id") int kandidat,
+//            @Field("periode_id") int periode
+//    );
 
     @Headers({
             "Accept: application/json",

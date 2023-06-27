@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        cvAbsensi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AbsensiActivity.class);
+                startActivity(intent);
+            }
+        });
 
         cvPerizinan.setOnClickListener(new View.OnClickListener() {
             @Override
