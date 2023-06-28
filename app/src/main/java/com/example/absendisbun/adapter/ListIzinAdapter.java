@@ -1,6 +1,7 @@
 package com.example.absendisbun.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -45,7 +46,7 @@ public class ListIzinAdapter extends RecyclerView.Adapter<ListIzinAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListIzinAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListIzinAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         ConverterData cvtData = new ConverterData();
         String tertanggal = "-";
         tertanggal = cvtData.convertDateFormat2(dataIzinList.get(position).getTertanggal());
@@ -64,6 +65,7 @@ public class ListIzinAdapter extends RecyclerView.Adapter<ListIzinAdapter.ViewHo
         holder.tertanggal.setText(tertanggal);
 //        holder.jumlahHari.setText(dataIzinList.get(position).getJumlahHari());
         holder.jenisIzin.setText(dataIzinList.get(position).getJenisAbsensi().getNama());
+        holder.jumlahHari.setText(String.valueOf(dataIzinList.get(position).getJumlahHari()));
         holder.btnFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

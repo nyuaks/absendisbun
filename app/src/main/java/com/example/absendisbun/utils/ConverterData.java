@@ -9,12 +9,14 @@ import com.example.absendisbun.config.Const;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class ConverterData {
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DEFAULT_DATE_FORMAT);
 
     public String convertDateFormat1(String dates){
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         try {
             date = dateFormat.parse(dates);
@@ -27,6 +29,7 @@ public class ConverterData {
     }
 
     public String convertDateFormat2(String dates){
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         try {
             date = dateFormat.parse(dates);
@@ -39,6 +42,7 @@ public class ConverterData {
     }
 
     public String convertTimeFormat1(String dates){
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         try {
             date = dateFormat.parse(dates);
@@ -51,6 +55,7 @@ public class ConverterData {
     }
 
     public String convertTimeFormat2(String dates){
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date date = new Date();
         try {
             date = dateFormat.parse(dates);
