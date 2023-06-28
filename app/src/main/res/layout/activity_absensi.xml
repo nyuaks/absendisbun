@@ -52,7 +52,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="Herman Saputra"
                     android:textColor="#ffff"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:layout_marginTop="8dp"
                     android:text="13:27 IN"
                     android:textColor="#F5F8FB"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -94,7 +94,7 @@
                     android:layout_marginTop="8dp"
                     android:text="13:27 OUT"
                     android:textColor="#E91E63"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

@@ -28,6 +28,7 @@ import com.example.absendisbun.manager.PrefManager;
 import com.example.absendisbun.service.ApiClient;
 import com.example.absendisbun.service.ApiInterface;
 import com.example.absendisbun.service.response.postabsensi.ResponsePostAbsensi;
+import com.example.absendisbun.service.response.setting.ResponseSetting;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +41,7 @@ import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -55,7 +57,7 @@ import retrofit2.Response;
 public class AbsensiActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
 
-    private TextView tvTImeIn,tvTimeOut;
+    private TextView tvTimeIn,tvTimeOut,tvUserName,tvNip;
     private ImageView imFoto;
     private Button btnAbsen,btnBeranda;
     private FusedLocationProviderClient client;
@@ -76,18 +78,22 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_absensi);
 
-        tvTImeIn = findViewById(R.id.tvTimeIn);
+        tvTimeIn = findViewById(R.id.tvTimeIn);
         tvTimeOut = findViewById(R.id.tvTimeOut);
         imFoto = findViewById(R.id.iv_foto_absen);
         btnAbsen = findViewById(R.id.button_absen);
         btnBeranda = findViewById(R.id.button_main);
+        tvUserName = findViewById(R.id.tvUserName);
+        tvNip = findViewById(R.id.tvNip);
+
         prf = new PrefManager(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         client = LocationServices.getFusedLocationProviderClient(this);
         Dexter.withActivity(this)
                 // below line is use to request the number of permissions which are required in our app.
                 .withPermissions(Manifest.permission.CAMERA,
-                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 // after adding permissions we are calling an with listener method.
                 .withListener(new MultiplePermissionsListener() {
                     @Override
@@ -99,8 +105,19 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
 
                     }
                 }).check();
-        openPermission();
         clikActionImg();
+        tvNip.setText (prf.getString(Const.MY_NIP));
+        tvUserName.setText(prf.getString(Const.MY_NAME));
+        getSetting();
+
+
+        btnBeranda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent inten = new Intent(AbsensiActivity.this, MainActivity.class);
+                startActivity(inten);
+            }
+        });
 
     }
 
@@ -109,6 +126,7 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
         btnAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openPermission();
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent,Image_Capture_Code);
             }
@@ -146,7 +164,8 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
         if (requestCode == Image_Capture_Code && resultCode == Activity.RESULT_OK) {
             if (resultCode == RESULT_OK) {
                 Bitmap bp = (Bitmap) data.getExtras().get("data");
-                Uri tempUri = getImageUri(bp);
+                Uri image = data.getData();
+                Uri tempUri = getImageUri(getApplicationContext(),bp);
 
                 // CALL THIS METHOD TO GET THE ACTUAL PATH
                 File finalFile = new File(getRealPathFromURI(tempUri));
@@ -179,10 +198,14 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
                                 .setContentText(response.message())
                                 .show();
                     }else{
-                        new SweetAlertDialog(AbsensiActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Peringatan")
-                                .setContentText("Error: "+response.message())
-                                .show();
+                        try {
+                            new SweetAlertDialog(AbsensiActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Peringatan")
+                                    .setContentText("Error: "+response.errorBody().string())
+                                    .show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -200,11 +223,41 @@ public class AbsensiActivity extends AppCompatActivity implements EasyPermission
 
 
     }
+    private void getSetting() {
+        Call<ResponseSetting> api = apiInterface.getSetting("Bearer "+prf.getString(Const.TOKEN));
+        api.enqueue(new Callback<ResponseSetting>() {
+            @Override
+            public void onResponse(Call<ResponseSetting> call, Response<ResponseSetting> response) {
+                if (response.isSuccessful()){
+                    if(response.body() != null) {
+                        tvTimeIn.setText("Masuk: " +response.body().getData().getJamMasuk());
+                        tvTimeOut.setText("Pulang: " +response.body().getData().getJamPulang());
+                    }
+                    else {
+                        new SweetAlertDialog(AbsensiActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Peringatan")
+                                .setContentText("Error: " + response.message())
+                                .show();
+                    }
+                }else {
+                    new SweetAlertDialog(AbsensiActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan")
+                            .setContentText("Error: " + response.message())
+                            .show();
+                }
+            }
 
-    public Uri getImageUri(Bitmap inImage) {
+            @Override
+            public void onFailure(Call<ResponseSetting> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public Uri getImageUri(Context context,Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), inImage, "Title", null);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
 

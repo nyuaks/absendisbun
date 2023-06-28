@@ -17,6 +17,8 @@ import com.example.absendisbun.service.ApiInterface;
 import com.example.absendisbun.service.response.login.ResponseLogin;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                letGoLogin();
-//                startActivity();
+//                letGoLogin();
+                startActivity();
             }
         });
     }
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        }else{
+        }else {
             String email = edEmail.getEditableText().toString();
             String password = edPassword.getEditableText().toString();
 
@@ -59,10 +61,10 @@ public class LoginActivity extends AppCompatActivity {
             api.enqueue(new Callback<ResponseLogin>() {
                 @Override
                 public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         assert response.body() != null;
-                        if (response.body().getData() != null && response.body().isSuccess()){
-                            Log.i("DATA USER",response.body().getData().toString());
+                        if (response.body().getData() != null && response.body().isSuccess()) {
+                            Log.i("DATA USER", response.body().getData().toString());
                             PrefManager prefManager = new PrefManager(getApplicationContext());
                             prefManager.setString(Const.TOKEN, response.body().getData().getToken());
                             prefManager.setString(Const.MY_NAME, response.body().getData().getUser().getName());
@@ -71,18 +73,21 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                        }else{
+                        } else {
                             new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Peringatan")
                                     .setContentText("User Tidak Terdaftar \n (Cek kembali Emai dan Password)")
                                     .show();
                         }
-                    }else{
-                        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("Peringatan")
-                                .setContentText("Error Code: "+response.message())
-                                .show();
-
+                    } else {
+                        try {
+                            new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Peringatan")
+                                    .setContentText("Error: " + response.errorBody().string())
+                                    .show();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
