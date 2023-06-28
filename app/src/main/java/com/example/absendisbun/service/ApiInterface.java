@@ -1,6 +1,8 @@
 package com.example.absendisbun.service;
 
+import com.example.absendisbun.service.response.jenisizin.ResponseJenisIzin;
 import com.example.absendisbun.service.response.listabsensi.ResponseListAbsensi;
+import com.example.absendisbun.service.response.listizin.ResponseListIzin;
 import com.example.absendisbun.service.response.login.ResponseLogin;
 import com.example.absendisbun.service.response.postizin.ResponsePostIzin;
 import com.example.absendisbun.service.response.postabsensi.ResponsePostAbsensi;

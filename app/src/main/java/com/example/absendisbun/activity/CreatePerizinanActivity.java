@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.app.Activity;
@@ -64,6 +65,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -179,6 +181,7 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
         RequestBody jumlahHari = RequestBody.create(MultipartBody.FORM, etJumlahHari.getEditableText().toString());
         RequestBody jenisIzin = RequestBody.create(MultipartBody.FORM, String.valueOf(jenisIzinId));
         MultipartBody.Part fileIzin=null;
+
         File dataFileIzin = new File(pathFileIzin);
         if ((dataFileIzin.exists())){
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),dataFileIzin);
@@ -191,9 +194,21 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
                 if (response.isSuccessful()){
                     if(response.body() != null && response.body().getData() !=null){
                         new SweetAlertDialog(CreatePerizinanActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                                .setTitleText("Sukses")
-                                .setContentText("Berhasil Submit Pengajuan")
+                                .setTitleText("Pesan Aplikasi")
+                                .setContentText("Pengajuan Izin Telah Berhasil di Upload. Silahkan Tunggu Konfirmasi Admin")
+                                .setConfirmText("Tutup")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismissWithAnimation();
+                                        Intent intent = new Intent(CreatePerizinanActivity.this, PerizinanActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                })
                                 .show();
+
                     }
                 }else{
                     new SweetAlertDialog(CreatePerizinanActivity.this, SweetAlertDialog.ERROR_TYPE)
@@ -286,7 +301,8 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
 
     private void pickFile(int request){
         Intent pickDocument = new Intent(Intent.ACTION_GET_CONTENT);
-        pickDocument.setType("application/pdf|zip/*");
+        pickDocument.setType("application/pdf");
+        pickDocument.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(pickDocument,request);
     }
     @Override
@@ -294,11 +310,12 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (data!=null){
-                uriFileIzin = data.getData();
+                Uri uriFileOri = data.getData();
 //                getDuplicateFile(uriFileIzin);
 
-//                pathFileIzin = getRealPathFromUri(uriFileIzin);
-                pathFileIzin = handleUri(getApplicationContext(),uriFileIzin);
+                uriFileIzin = duplicateFileToInternalStorage(uriFileOri);
+
+                pathFileIzin = getRealPathFromUri(uriFileIzin);
 
                 tvNamaFileIzin.setText(pathFileIzin);
                 Log.i("fileIzin",""+pathFileIzin);
@@ -317,85 +334,37 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
 
     }
 
-    public static String handleUri(Context context, Uri uri) {
-        ContentResolver contentResolver = context.getContentResolver();
-        String type = contentResolver.getType(uri);
-        if (type != null) {
-            File dir = new File(context.getCacheDir(), "external_files");
-            dir.mkdir();
-            File outputFile = new File(dir, System.currentTimeMillis() + type);
-            String path = null;
-            try {
-                path = copyStreamToFile(contentResolver.openInputStream(uri), outputFile.getAbsolutePath());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            return path;
-        }
-        return null;
-    }
-
-    private static String copyStreamToFile(InputStream inputStream, String outputPath) {
-        FileOutputStream outputStream = null;
+    private Uri duplicateFileToInternalStorage(Uri originalFileUri) {
         try {
-            outputStream = new FileOutputStream(outputPath);
-            byte[] buffer = new byte[4 * 1024]; // Ukuran buffer
-            while (true) {
-                int byteCount = inputStream.read(buffer);
-                if (byteCount < 0) break;
-                outputStream.write(buffer, 0, byteCount);
+            // Mendapatkan InputStream dari dokumen PDF asli
+            InputStream inputStream = getContentResolver().openInputStream(originalFileUri);
+
+            // Membuat file baru di direktori temporary aplikasi
+            File tempDir = getApplicationContext().getCacheDir();
+            File tempFile = new File(tempDir, "duplicate_pdf.pdf");
+
+            // Membuka OutputStream ke file baru
+            OutputStream outputStream = new FileOutputStream(tempFile);
+
+            // Membaca dan menulis byte dokumen PDF dari InputStream ke OutputStream
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
             }
-            outputStream.flush();
-            return outputPath;
+
+            // Menutup InputStream dan OutputStream
+            inputStream.close();
+            outputStream.close();
+
+            // Mengembalikan URI dari dokumen PDF duplikat
+            return Uri.fromFile(tempFile);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (inputStream != null) inputStream.close();
-                if (outputStream != null) outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
         return null;
     }
-
-    public static String getFileName(ContentResolver contentResolver, Uri fileUri) {
-        String name = "";
-        Cursor returnCursor = contentResolver.query(fileUri, null, null, null, null);
-        if (returnCursor != null) {
-            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-            returnCursor.moveToFirst();
-            name = returnCursor.getString(nameIndex);
-            returnCursor.close();
-        }
-        return name;
-    }
-//    private void getDuplicateFile(Uri uriFileIzin) {
-//        ParcelFileDescriptor parcelFileDescriptor = null;
-//        try {
-//            parcelFileDescriptor = getApplicationContext().getContentResolver().openFileDescriptor(uriFileIzin, "r", null);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        if (parcelFileDescriptor != null) {
-//            try {
-//                FileInputStream inputStream = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
-//                File file = new File(getApplicationContext().getCacheDir(), getFileName(getApplicationContext().getContentResolver(), uriFileIzin));
-//                FileOutputStream outputStream = new FileOutputStream(file);
-//                IOUtils.copy(inputStream, outputStream);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                try {
-//                    parcelFileDescriptor.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//    }
 
 //    public String getRealPathFromUri(final Uri uri) {
 //        // DocumentProvider
@@ -610,15 +579,15 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
     }
 
     private boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+        return "com.example.externalstorage.documents".equals(uri.getAuthority());
     }
 
     private boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+        return "com.example.providers.downloads.documents".equals(uri.getAuthority());
     }
 
     private boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
+        return "com.example.providers.media.documents".equals(uri.getAuthority());
     }
 
     private boolean isGooglePhotosUri(Uri uri) {
