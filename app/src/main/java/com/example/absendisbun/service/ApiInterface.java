@@ -1,6 +1,7 @@
 package com.example.absendisbun.service;
 
 import com.example.absendisbun.service.response.jenisizin.ResponseJenisIzin;
+import com.example.absendisbun.service.response.jenispengajuan.ResponseJenisPengajuan;
 import com.example.absendisbun.service.response.listabsensi.ResponseListAbsensi;
 import com.example.absendisbun.service.response.listizin.ResponseListIzin;
 import com.example.absendisbun.service.response.login.ResponseLogin;
@@ -71,6 +72,9 @@ public interface ApiInterface {
     @GET("jenisAbsensi")
     Call<ResponseJenisIzin> getJenisIzin(@Header("Authorization") String token);
 
+    @GET("jenisPengajuan")
+    Call<ResponseJenisPengajuan> getJenisPengajuan(@Header("Authorization") String token);
+
     @Multipart
     @Headers({
             "Accept: application/json",
@@ -80,7 +84,8 @@ public interface ApiInterface {
                                     @Part("tertanggal") RequestBody tglIzin,
                                     @Part("jumlah_hari") RequestBody jumlahHari,
                                     @Part("jenis_absensi_id") RequestBody jenisIzinId,
-                                    @Part MultipartBody.Part media
+                                    @Part MultipartBody.Part media,
+                                    @Part("jenis_pengajuan_id") RequestBody jenisPengajuan
     );
 //
 //    @GET("hasil_votings")

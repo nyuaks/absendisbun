@@ -70,6 +70,7 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
         holder.timeIn.setText(timeIn);
         holder.timeOut.setText(timeOut);
         holder.jenisAbsen.setText(dataListAbsensis.get(position).getJenisAbsensi().getNama());
+        holder.jenisAbsen.setText(dataListAbsensis.get(position).getLate());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,13 +87,13 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView createAt, timeIn, timeOut, jenisAbsen;
+        TextView createAt, timeIn, timeOut, jenisAbsen,tvKeterangan;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             createAt = itemView.findViewById(R.id.created);
             timeIn = itemView.findViewById(R.id.tvTimeIn);
             timeOut = itemView.findViewById(R.id.tvTimeOut);
-            jenisAbsen = itemView.findViewById(R.id.tvJenisAbsen);
+            jenisAbsen = itemView.findViewById(R.id.tvKeterangan);
         }
     }
 }

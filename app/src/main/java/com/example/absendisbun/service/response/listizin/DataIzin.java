@@ -29,6 +29,9 @@ public class DataIzin {
 	@SerializedName("jenis_absensi")
 	private JenisAbsensi jenisAbsensi;
 
+	@SerializedName("jenis_pengajuan")
+	private JenisPengajuan jenisPengajuan;
+
 	@SerializedName("media")
 	private List<Object> media;
 
@@ -71,6 +74,9 @@ public class DataIzin {
 
 	public JenisAbsensi getJenisAbsensi(){
 		return jenisAbsensi;
+	}
+	public JenisPengajuan getJenisPengajuan(){
+		return jenisPengajuan;
 	}
 
 	public List<Object> getMedia(){

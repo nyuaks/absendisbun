@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
@@ -43,12 +44,15 @@ import android.widget.Toast;
 
 import com.example.absendisbun.R;
 import com.example.absendisbun.adapter.SpinnerJenisIzinAdapter;
+import com.example.absendisbun.adapter.SpinnerJenisPengajuanAdapter;
 import com.example.absendisbun.config.Const;
 import com.example.absendisbun.manager.PrefManager;
 import com.example.absendisbun.service.ApiClient;
 import com.example.absendisbun.service.ApiInterface;
 import com.example.absendisbun.service.response.jenisizin.DataItemJenisIzin;
 import com.example.absendisbun.service.response.jenisizin.ResponseJenisIzin;
+import com.example.absendisbun.service.response.jenispengajuan.DataJenisPengajuan;
+import com.example.absendisbun.service.response.jenispengajuan.ResponseJenisPengajuan;
 import com.example.absendisbun.service.response.postizin.ResponsePostIzin;
 import com.example.absendisbun.utils.ConverterData;
 import com.karumi.dexter.Dexter;
@@ -92,10 +96,15 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
     private ApiInterface apiInterface;
     private PrefManager prf;
     List<DataItemJenisIzin> jenisIzinList;
+
+    List<DataJenisPengajuan> jenisPengajuanList;
     private Spinner spinJenisIzin;
+    private Spinner spinJenisPengajuan;
     private Integer jenisIzinId;
+    private Integer jenisPengajuanId;
     BroadcastReceiver broadcastReceiver;
     private final SimpleDateFormat sdfWatchTime = new SimpleDateFormat("HH:mm");
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +120,7 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
         etTanggal = findViewById(R.id.tertanggal);
         etJumlahHari = findViewById(R.id.jumlah_hari);
         spinJenisIzin = findViewById(R.id.sp_jenis_izin);
+        spinJenisPengajuan = findViewById(R.id.sp_jenis_pengajuan);
         btnFileIzin = findViewById(R.id.btn_file_izin);
         btnSubmitIzin = findViewById(R.id.btn_submit_izin);
         btnTgl = findViewById(R.id.btn_tgl);
@@ -170,12 +180,14 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
         }
 
         getJenisIzin();
+        getJenisPengajuan();
     }
 
     private void ajukanIzin() {
         RequestBody tertanggal = RequestBody.create(MultipartBody.FORM, etTanggal.getEditableText().toString());
         RequestBody jumlahHari = RequestBody.create(MultipartBody.FORM, etJumlahHari.getEditableText().toString());
         RequestBody jenisIzin = RequestBody.create(MultipartBody.FORM, String.valueOf(jenisIzinId));
+        RequestBody jenisPengajuan = RequestBody.create(MultipartBody.FORM, String.valueOf(jenisPengajuanId));
         MultipartBody.Part fileIzin=null;
 
         File dataFileIzin = new File(pathFileIzin);
@@ -183,7 +195,7 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"),dataFileIzin);
             fileIzin = MultipartBody.Part.createFormData("media",dataFileIzin.getName(),requestFile);
         }
-        Call<ResponsePostIzin> api = apiInterface.postIzin("Bearer "+prf.getString(Const.TOKEN),tertanggal,jumlahHari,jenisIzin,fileIzin);
+        Call<ResponsePostIzin> api = apiInterface.postIzin("Bearer "+prf.getString(Const.TOKEN),tertanggal,jumlahHari,jenisIzin,fileIzin,jenisPengajuan);
         api.enqueue(new Callback<ResponsePostIzin>() {
             @Override
             public void onResponse(Call<ResponsePostIzin> call, Response<ResponsePostIzin> response) {
@@ -279,6 +291,47 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
 
             @Override
             public void onFailure(Call<ResponseJenisIzin> call, Throwable t) {
+                new SweetAlertDialog(CreatePerizinanActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Peringatan")
+                        .setContentText("Gagal memuat data rekap absensi!")
+                        .show();
+            }
+        });
+    }
+    private void getJenisPengajuan() {
+        Call<ResponseJenisPengajuan> api = apiInterface.getJenisPengajuan("Bearer "+prf.getString(Const.TOKEN));
+        api.enqueue(new Callback<ResponseJenisPengajuan>() {
+            @Override
+            public void onResponse(Call<ResponseJenisPengajuan> call, Response<ResponseJenisPengajuan> response) {
+                if (response.isSuccessful()){
+                    if(response.body() != null && response.body().getData().size() > 0){
+                        SpinnerJenisPengajuanAdapter spinnerJenisPengajuanAdapter = new SpinnerJenisPengajuanAdapter(getApplicationContext(),
+                                android.R.layout.simple_spinner_item, response.body().getData());
+                        spinnerJenisPengajuanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        jenisPengajuanList = response.body().getData();
+                        spinJenisPengajuan.setAdapter(spinnerJenisPengajuanAdapter);
+                        spinJenisPengajuan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                jenisPengajuanId = jenisPengajuanList.get(position).getId();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+                }else{
+                    new SweetAlertDialog(CreatePerizinanActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Peringatan")
+                            .setContentText("Error: "+response.message())
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJenisPengajuan> call, Throwable t) {
                 new SweetAlertDialog(CreatePerizinanActivity.this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Peringatan")
                         .setContentText("Gagal memuat data rekap absensi!")

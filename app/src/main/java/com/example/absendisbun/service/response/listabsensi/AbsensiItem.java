@@ -8,7 +8,7 @@ public class AbsensiItem{
 	private int jenisAbsensiId;
 
 	@SerializedName("keterangan")
-	private Object keterangan;
+	private String keterangan;
 
 	@SerializedName("pegawai_id")
 	private int pegawaiId;
@@ -35,7 +35,7 @@ public class AbsensiItem{
 	private String updatedAt;
 
 	@SerializedName("late")
-	private boolean late;
+	private String late;
 
 	@SerializedName("time_in")
 	private String timeIn;
@@ -47,7 +47,7 @@ public class AbsensiItem{
 		return jenisAbsensiId;
 	}
 
-	public Object getKeterangan(){
+	public String getKeterangan(){
 		return keterangan;
 	}
 
@@ -83,7 +83,7 @@ public class AbsensiItem{
 		return updatedAt;
 	}
 
-	public boolean isLate(){
+	public String getLate(){
 		return late;
 	}
 
