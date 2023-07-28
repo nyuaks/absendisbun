@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"> </uses-permission>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application
@@ -21,24 +25,26 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AbsenDisbun"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon,android:allowBackup,android:theme,android:usesCleartextTraffic"
-        android:requestLegacyExternalStorage="true"
         tools:targetApi="q">
         <activity
+            android:name=".ProfilActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.CreatePerizinanActivity"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
-                <action
-                    android:name="android.intent.action.PICK"/>
-                <category
-                    android:name="android.intent.category.DEFAULT"/>
-                <category
-                    android:name="android.intent.category.OPENABLE"/>
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="pdf/*"/>
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="pdf/*" />
             </intent-filter>
         </activity>
         <activity
