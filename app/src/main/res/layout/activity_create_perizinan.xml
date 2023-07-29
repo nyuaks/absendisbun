@@ -125,6 +125,28 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/tvdeskripsiCuti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:text="Jumlah cuti yang dapat diajukan :"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+    <TextView
+        android:id="@+id/tvJumlahCuti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:text="10"
+        android:textColor="#DA1919"
+        app:layout_constraintStart_toEndOf="@id/tvdeskripsiCuti"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+    <TextView
         android:id="@+id/tvIsiForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -133,7 +155,7 @@
         android:textStyle="bold"
         android:text="Silahkan isi form pengajuan izin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvdeskripsiCuti" />
 
 
     <com.google.android.material.textfield.TextInputLayout

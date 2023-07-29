@@ -121,17 +121,28 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/baseline_location_city_24"
-                android:layout_marginLeft="30dp"/>
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dinas Perkebuanan"
+                android:text="NIK: "
                 android:textColor="#000"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvNik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="093273273"
+                android:textColor="#000"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="5dp"
                 android:textSize="14sp"/>
 
@@ -141,7 +152,6 @@
             android:layout_height="2dp"
             android:background="#DEDCDC"/>
         <LinearLayout
-            android:id="@+id/kebijakan_privasi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -151,18 +161,91 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/info_karyawan">
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_error_outline_black_24dp"
-                android:layout_marginLeft="30dp"/>
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                android:layout_marginLeft="10dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kebijakan dan Privasi"
+                android:text="NIP: "
                 android:textColor="#000"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/nip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="093273273"
+                android:textColor="#000"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#DEDCDC"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_karyawan">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: "
+                android:textColor="#000"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="093273273"
+                android:textColor="#000"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="#DEDCDC"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_karyawan">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dinas Pekebunan Provinsi Kalimatan Timur"
+                android:textColor="#000"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>
 

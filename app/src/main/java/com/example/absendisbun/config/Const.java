@@ -12,6 +12,9 @@ public class Const {
     public static final String MY_POINT="myPoint";
     public static final String MY_NAME="myName";
     public static final String MY_NIP="myNIP";
+    public static final String MY_NIK="nik";
+    public static final String MY_STATUS="status";
+    public static final String JUMLAH_CUTI="cuti";
     public static final String MY_EMAIL="myEmail";
 
     public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";

@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.absendisbun.R;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvRekapAbsensi;
     private TextView namaKaryawan, nip, jam, tanggal;
     private CardView cvRekapanAbsen,cvPerizinan,cvAbsensi;
+
+    private Button btnLogin;
     BroadcastReceiver broadcastReceiver;
     private final SimpleDateFormat sdfWatchTime = new SimpleDateFormat("HH:mm");
     private final SimpleDateFormat sdfWatchDate = new SimpleDateFormat("dd MMMM YYYY");
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         cvAbsensi = findViewById(R.id.cardViewAbsensi);
         cvPerizinan = findViewById(R.id.cardViewPerizinan);
         cvRekapanAbsen = findViewById(R.id.cardViewRekapAbsen);
+        btnLogin = findViewById(R.id.button_login);
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         prf = new PrefManager(this);
@@ -88,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, PerizinanActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfilActivity.class);
                 startActivity(intent);
             }
         });

@@ -32,7 +32,7 @@
         tools:replace="android:icon,android:allowBackup,android:theme,android:usesCleartextTraffic"
         tools:targetApi="q">
         <activity
-            android:name=".ProfilActivity"
+            android:name=".activity.ProfilActivity"
             android:exported="false" />
         <activity
             android:name=".activity.CreatePerizinanActivity"

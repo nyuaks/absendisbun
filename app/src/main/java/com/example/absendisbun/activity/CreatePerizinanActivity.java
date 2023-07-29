@@ -90,7 +90,7 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
     private Uri uriFileIzin = null;
     private String pathFileIzin;
     private EditText etTanggal, etJumlahHari;
-    private TextView tvNamaFileIzin,namaKaryawan, nip,jam,tanggal;
+    private TextView tvNamaFileIzin,namaKaryawan, nip,jam,tanggal,tvJumlahCuti;
     private Button btnTgl, btnFileIzin, btnSubmitIzin;
     private DatePickerDialog dpd;
     private ApiInterface apiInterface;
@@ -124,9 +124,11 @@ public class CreatePerizinanActivity extends AppCompatActivity implements DatePi
         btnFileIzin = findViewById(R.id.btn_file_izin);
         btnSubmitIzin = findViewById(R.id.btn_submit_izin);
         btnTgl = findViewById(R.id.btn_tgl);
+        tvJumlahCuti = findViewById(R.id.tvJumlahCuti);
 
         nip.setText(prf.getString(Const.MY_NIP));
         namaKaryawan.setText(prf.getString(Const.MY_NAME));
+        tvJumlahCuti.setText(prf.getString(Const.JUMLAH_CUTI));
 
         ConverterData cvtData = new ConverterData();
         String currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());

@@ -41,19 +41,19 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                letGoLogin();
-                startActivity();
+                letGoLogin();
+//                startActivity();
             }
         });
     }
 
     private void letGoLogin() {
         PrefManager prf = new PrefManager(LoginActivity.this);
-        if (!prf.getString(Const.TOKEN).isEmpty()){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }else {
+//        if (!prf.getString(Const.TOKEN).isEmpty()){
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//        }else {
             String email = edEmail.getEditableText().toString();
             String password = edPassword.getEditableText().toString();
 
@@ -70,6 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                             prefManager.setString(Const.MY_NAME, response.body().getData().getUser().getName());
                             prefManager.setString(Const.MY_EMAIL, response.body().getData().getUser().getEmail());
                             prefManager.setString(Const.MY_NIP, response.body().getData().getUser().getPegawai().getNip());
+                            prefManager.setString(Const.MY_NIK, response.body().getData().getUser().getPegawai().getNik());
+                            prefManager.setString(Const.MY_STATUS, response.body().getData().getUser().getPegawai().getStatusPns());
+                            prefManager.setString(Const.JUMLAH_CUTI, String.valueOf(response.body().getData().getUser().getPegawai().getJumlahCuti()));
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
@@ -99,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             .show();
                 }
             });
-        }
+//        }
     }
 
     public void startActivity(){

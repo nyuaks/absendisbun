@@ -43,6 +43,9 @@ public class Pegawai{
 	@SerializedName("bidang_id")
 	private int bidangId;
 
+	@SerializedName("jumlah_cuti")
+	private int jumlahCuti;
+
 	@SerializedName("tanggal_lahir")
 	private String tanggalLahir;
 
@@ -96,6 +99,10 @@ public class Pegawai{
 
 	public int getBidangId(){
 		return bidangId;
+	}
+
+	public int getJumlahCuti(){
+		return jumlahCuti;
 	}
 
 	public String getTanggalLahir(){
