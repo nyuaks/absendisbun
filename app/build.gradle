@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.absendisbun'
+    namespace 'cloud.suratdishut.absen'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.absendisbun"
+        applicationId "cloud.suratdishut.absen"
         minSdk 26
         targetSdk 33
         versionCode 1
